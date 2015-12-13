@@ -1,30 +1,19 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import * as actionCreators from '../actions'
 import Armer from './armer';
-import dispatcher from '../dispatcher'
 
-export default React.createClass({
-  componentWillMount(){
-    this.props.store.on('change', this.updateState);
-    this.setState(this.props.store.state);
-  },
-  componentWillUnMount(){
-    this.props.store.off('change', this.updateState);
-  },
-  updateState(state){
-    this.setState(state);
-  },
-  onClick(){
-    dispatcher.dispatch({
-      type: 'launcher:press'
-    });
-  },
+const Launcher = React.createClass({
   render(){
+    const { launch, arm, disarm, status} = this.props
     return (<div>
-      <h1>Launcher is {this.state.state}</h1>
-      <Armer />
+      <h1>Launcher is {status}</h1>
+      <Armer {... { status, arm, disarm }}/>
       <div>
-        <button onClick={this.onClick}>Launch</button>
+        <button onClick={ launch }>Launch</button>
       </div>
     </div>);
   }
 });
+
+export default connect(state => state, actionCreators)(Launcher);

@@ -1,27 +1,22 @@
 import React from 'react';
-import dispatcher from '../dispatcher'
 
 export default React.createClass({
-  getInitialState(){
-    return {
-      armed: false
-    };
+  armed(){
+    return this.props.status !== 'rest';
   },
 
   onChange(e){
-    this.setState({
-      armed: e.target.checked
-    });
-
-    dispatcher.dispatch({
-      type: e.target.checked ? 'armer:closed' : 'armer:open'
-    });
+    if (this.armed()){
+      this.props.disarm();
+    } else {
+      this.props.arm();
+    }
   },
 
   render(){
     return (
       <div>
-        <label><input type="checkbox" onChange={this.onChange} checked={this.state.armed} /> Armed</label>
+        <label><input type="checkbox" onChange={this.onChange} checked={this.armed()} /> Armed</label>
       </div>
     );
   }
